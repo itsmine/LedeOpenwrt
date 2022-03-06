@@ -55,12 +55,13 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: SSH connection to Actions
-        uses: itsmine/debugger-action@master
+#      - name: SSH connection to Actions
+#        uses: itsmine/debugger-action@master
 
 
       - name: Generate configuration file
-        run: make defconfig
+        run: make menuconfig
+#        run: make defconfig
 
       - name: Make download
         run: |
