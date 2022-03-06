@@ -58,6 +58,7 @@ jobs:
       - name: SSH connection to Actions
         uses: itsmine/debugger-action@master
 
+
       - name: Generate configuration file
         run: make defconfig
 
