@@ -11,6 +11,11 @@ on:
   push:
     branches: 
       - master
+#  schedule:
+#    - cron: 0 2 * * *
+  watch:
+    types: started
+
 
 
 #  schedule:
@@ -52,6 +57,8 @@ jobs:
       - name: Update feeds
         run: |
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
+          sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' ./feeds.conf.default
+          sed -i '$a src-git small https://github.com/kenzok8/small' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
@@ -59,13 +66,14 @@ jobs:
 #        uses: itsmine/debugger-action@master
 
 
-      - name: Generate configuration file
-        run: make menuconfig
+#      - name: Generate configuration file
+#        run: make menuconfig
 #        run: make defconfig
 
       - name: Make download
         run: |
           make download -j8
+          find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
       - name: Compile firmware
@@ -91,29 +99,20 @@ jobs:
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
       - name: Deliver buildinfo
-        uses: actions/upload-artifact@v2
+        uses: itsmine/upload-artifact@master
         with:
           name: OpenWrt_buildinfo
           path: ./artifact/buildinfo/
 
       - name: Deliver package
-        uses: actions/upload-artifact@v2
+        uses: itsmine/upload-artifact@master
         with:
           name: OpenWrt_package
           path: ./artifact/package/
-
-      - name: Deliver firmware
-        uses: actions/upload-artifact@v2
+          
+      - name : Upload artifact
+        uses: itsmine/upload-artifact@master
         with:
           name: OpenWrt_firmware
-          path: ./bin/targets/
-  
-
-      - name: Upload release asset
-        if: github.event == 'release'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.YOURTOKEN }}
-          file: ./artifact/firmware/*
-          tag: ${{ github.ref }}
-          file_glob: true
+          path: bin/targets/
+          
