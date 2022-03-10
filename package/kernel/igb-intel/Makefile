@@ -31,7 +31,7 @@ MAKE_OPTS:= \
 define KernelPackage/igb-intel
   SUBMENU:=Network Devices
   TITLE:=Intel igb drivers - out of tree version
-  DEPENDS:=@!LINUX_5_15 +kmod-ptp @PCI_SUPPORT 
+  DEPENDS:=@LINUX_5_15 +kmod-ptp @PCI_SUPPORT 
   KCONFIG:=CONFIG_IGB \
     CONFIG_IGB_HWMON=n \
     CONFIG_IGB_DCA=n
