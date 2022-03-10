@@ -5,14 +5,9 @@
 #
 # Copyright (C) 2020 KFERMercer
 #
-name: OpenWrt-CI
+name: LEDEOpenWrt
 
 on:
-  push:
-    branches: 
-      - master
-#  schedule:
-#    - cron: 0 2 * * *
   watch:
     types: started
 
